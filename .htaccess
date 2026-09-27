@@ -1,0 +1,13 @@
+# Serve our own 404 page instead of the host's default.
+ErrorDocument 404 /404.html
+
+# Cache the photographs hard; they never change once published.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png  "access plus 1 year"
+  ExpiresByType video/mp4  "access plus 1 year"
+  ExpiresByType text/css   "access plus 1 week"
+  ExpiresByType text/javascript "access plus 1 week"
+</IfModule>

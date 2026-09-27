@@ -1,0 +1,892 @@
+/* ==========================================================================
+   Silva Ranch — design system
+   Warm paper, deep ink, one maroon accent. Photographs and rhythm carry it.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- ink & paper ---- */
+  --ink:        #1A1714;
+  --ink-soft:   #4A4038;
+  --ink-mute:   #6B6055;
+  --paper:      #FBF8F3;
+  --paper-2:    #F3ECE1;
+  --paper-3:    #E6DBC9;
+  --rule:       #DCD0BC;
+
+  /* ---- accents ----
+     wheat reads on dark grounds only; wheat-dk is its light-ground twin. */
+  --maroon:     #6B1518;
+  --maroon-dk:  #4E0F11;
+  --wheat:      #C08A2E;
+  --wheat-dk:   #7E5210;
+  --pasture:    #333C27;
+
+  /* ---- type ---- */
+  --display: "Petrona", "Petrona Fallback", Georgia, serif;
+  --body:    "Instrument Sans", "Instrument Fallback", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --t-xl:   clamp(2.75rem, 7.2vw, 6rem);
+  --t-lg:   clamp(2.1rem,  4.6vw, 3.6rem);
+  --t-md:   clamp(1.6rem,  3vw,   2.5rem);
+  --t-sm:   clamp(1.2rem,  1.7vw, 1.5rem);
+  --t-body: clamp(1.0625rem, 0.4vw + 1rem, 1.1875rem);
+  --t-fine: 0.9375rem;
+  --t-eyebrow: 0.75rem;
+
+  /* ---- space ---- */
+  --s1: 0.5rem;  --s2: 1rem;   --s3: 1.5rem;  --s4: 2rem;
+  --s5: 3rem;    --s6: 4rem;   --s7: 6rem;    --s8: 9rem;
+  --section: clamp(4rem, 9vw, 8.5rem);
+
+  /* ---- layout ---- */
+  --wide:    1320px;
+  --content: 1080px;
+  --gutter:  clamp(1.25rem, 5vw, 4rem);
+  --stick:   76px;
+
+  /* ---- line lengths: three for prose, two for headlines. Nothing else. ---- */
+  --measure-sm: 46ch;
+  --measure:    62ch;
+  --measure-lg: 72ch;
+  --head-sm:    16ch;
+  --head:       20ch;
+}
+
+/* Stand-in fonts sized to match the real ones, so the page does not reflow
+   when the webfonts arrive. Ratios measured against Petrona and Instrument Sans. */
+@font-face {
+  font-family: "Petrona Fallback";
+  src: local("Georgia"), local("Times New Roman");
+  size-adjust: 87%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Instrument Fallback";
+  src: local("Arial"), local("Helvetica Neue");
+  size-adjust: 97%;
+  ascent-override: 96%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--t-body);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Anything jumped to lands clear of the sticky header. */
+#main, h1, h2, h3, [id] { scroll-margin-top: calc(var(--stick) + var(--s2)); }
+
+img, picture, svg { display: block; max-width: 100%; height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+p, li { text-wrap: pretty; }
+
+a { color: var(--maroon); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--maroon-dk); }
+
+:focus-visible { outline: 2px solid var(--maroon); outline-offset: 3px; border-radius: 2px; }
+/* Maroon disappears on the dark grounds — the ring has to change with them. */
+.section--dark :focus-visible,
+.section--pasture :focus-visible,
+.site-footer :focus-visible,
+.hero :focus-visible { outline-color: var(--paper); }
+
+.skip {
+  position: absolute; left: -9999px;
+  background: var(--ink); color: var(--paper);
+  padding: var(--s2) var(--s3); z-index: 200;
+}
+.skip:focus { left: var(--s2); top: var(--s2); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ==========================================================================
+   Layout primitives
+   ========================================================================== */
+
+.wrap { width: 100%; max-width: var(--wide); margin-inline: auto; padding-inline: var(--gutter); }
+.wrap--narrow { max-width: var(--content); }
+
+.measure    { max-width: var(--measure); }
+.measure-sm { max-width: var(--measure-sm); }
+.measure-lg { max-width: var(--measure-lg); }
+.head       { max-width: var(--head); }
+.head-sm    { max-width: var(--head-sm); }
+
+.section { padding-block: var(--section); }
+.section--tight { padding-block: clamp(3rem, 6vw, 5.5rem); }
+/* A thin band, not a section — keeps two adjacent blocks from reading as one. */
+.section--band { padding-block: clamp(1.75rem, 3.5vw, 2.75rem); border-bottom: 1px solid var(--rule); }
+.section--tint { background: var(--paper-2); }
+.section--dark { background: var(--ink); color: var(--paper); }
+.section--pasture { background: var(--pasture); color: var(--paper); }
+
+.section--dark h1, .section--dark h2, .section--dark h3,
+.section--pasture h1, .section--pasture h2, .section--pasture h3 { color: var(--paper); }
+.section--dark a:not(.btn), .section--pasture a:not(.btn) { color: var(--wheat); }
+.section--dark a:not(.btn):hover, .section--pasture a:not(.btn):hover { color: #E0AC53; }
+
+.stack > * + * { margin-top: var(--s3); }
+.stack-lg > * + * { margin-top: var(--s5); }
+
+/* Three spacing steps for genuine one-offs. Everything else belongs to a component. */
+.mt-s { margin-top: var(--s3); }
+.mt-m { margin-top: var(--s4); }
+.mt-l { margin-top: var(--s5); }
+
+/* ==========================================================================
+   Typography components
+   ========================================================================== */
+
+.eyebrow {
+  font-family: var(--body);
+  font-size: var(--t-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0;
+}
+.section--dark .eyebrow, .section--pasture .eyebrow { color: var(--wheat); }
+
+/* A rule with a label sitting on it — the catalog device that structures the page. */
+.rule-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  border-top: 1px solid var(--rule);
+  padding-top: var(--s2);
+  margin-bottom: var(--s5);
+}
+.rule-head .eyebrow { flex: none; }
+.rule-head::after { content: ""; flex: 1 1 auto; }
+.section--dark .rule-head, .section--pasture .rule-head { border-color: rgba(251,248,243,0.24); }
+
+.display-xl, .display-lg, .display-md, .display-sm {
+  font-family: var(--display); font-weight: 600; line-height: 1.08; text-wrap: balance;
+}
+.display-xl { font-size: var(--t-xl); letter-spacing: -0.025em; }
+.display-lg { font-size: var(--t-lg); letter-spacing: -0.02em; }
+.display-md { font-size: var(--t-md); line-height: 1.15; }
+.display-sm { font-size: var(--t-sm); letter-spacing: -0.01em; line-height: 1.2; }
+
+.lede {
+  font-size: clamp(1.1875rem, 1.1vw + 1rem, 1.5rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.section--dark .lede, .section--pasture .lede { color: rgba(251,248,243,0.82); }
+
+.fine { font-size: var(--t-fine); color: var(--ink-mute); }
+.section--dark .fine, .section--pasture .fine { color: rgba(251,248,243,0.7); }
+
+.prose > * + * { margin-top: 1.15em; }
+.prose h3 { margin-top: 2em; font-size: var(--t-sm); }
+.prose h3:first-child { margin-top: 0; }
+.prose ul { padding-left: 1.15em; }
+.prose li + li { margin-top: 0.45em; }
+.prose strong { font-weight: 600; }
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6em;
+  font-family: var(--body);
+  font-size: 0.9375rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.95em 1.9em;
+  min-height: 48px;
+  border: 1px solid var(--maroon);
+  background: var(--maroon); color: var(--paper);
+  text-decoration: none; cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.btn:hover { background: var(--maroon-dk); border-color: var(--maroon-dk); color: var(--paper); }
+
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn--ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* Maroon on a flat dark ground is the same value as the ground — the block
+   vanishes and only the lettering reads. Cream carries the primary there. */
+.section--dark .btn:not(.btn--ghost),
+.section--pasture .btn:not(.btn--ghost) {
+  background: var(--paper); color: var(--ink); border-color: var(--paper);
+}
+.section--dark .btn:not(.btn--ghost):hover,
+.section--pasture .btn:not(.btn--ghost):hover {
+  background: var(--wheat); border-color: var(--wheat); color: var(--ink);
+}
+.section--dark .btn--ghost, .section--pasture .btn--ghost { color: var(--paper); border-color: rgba(251,248,243,0.5); }
+.section--dark .btn--ghost:hover, .section--pasture .btn--ghost:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); align-items: center; }
+
+/* A quiet text link with a trailing rule — used for secondary navigation. */
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  font-weight: 600; font-size: 0.9375rem;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor; padding-bottom: 0.25em;
+}
+.link-arrow::after { content: "→"; transition: transform 160ms ease; }
+.link-arrow:hover::after { transform: translateX(3px); }
+/* Grow the tap target upward so the underline stays tight to the text. */
+@media (max-width: 900px) { .link-arrow { padding-block: 1em 0.25em; } }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(251,248,243,0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s3);
+  min-height: var(--stick);
+}
+
+.brand { display: flex; align-items: center; gap: 0.75rem; min-height: 44px; text-decoration: none; color: var(--ink); }
+.brand img { width: 46px; height: auto; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+.brand-name {
+  font-family: var(--display); font-weight: 700;
+  font-size: 1.2rem; letter-spacing: 0.01em;
+}
+.brand-tag {
+  font-size: 0.625rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+}
+
+.nav { display: flex; align-items: center; gap: clamp(1rem, 2.2vw, 2rem); }
+.nav a {
+  font-size: 0.9375rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+  padding-block: 0.35em;
+  border-bottom: 1.5px solid transparent;
+}
+.nav a:hover { border-bottom-color: var(--maroon); color: var(--maroon); }
+.nav a[aria-current="page"] { border-bottom-color: var(--ink); }
+/* .nav a sets the link colour, and it outranks .btn — say it again here or the
+   header button ends up dark text on the maroon fill. */
+.nav .btn { font-size: 0.8125rem; padding: 0.75em 1.35em; min-height: 44px; border-bottom-width: 1px; color: var(--paper); }
+.nav .btn:hover { border-bottom-color: var(--maroon-dk); color: var(--paper); }
+
+.nav-toggle {
+  display: none;
+  background: none; border: 1px solid var(--rule);
+  width: 46px; height: 46px; cursor: pointer;
+  align-items: center; justify-content: center;
+}
+.nav-toggle span { display: block; width: 20px; height: 1.5px; background: var(--ink); position: relative; }
+.nav-toggle span::before, .nav-toggle span::after {
+  content: ""; position: absolute; left: 0; width: 20px; height: 1.5px; background: var(--ink);
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after  { top: 6px; }
+.nav-toggle[aria-expanded="true"] span { background: transparent; }
+.nav-toggle[aria-expanded="true"] span::before { transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span::after  { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 900px) {
+  .nav-toggle { display: flex; }
+  .nav {
+    position: fixed; inset: var(--stick) 0 auto 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: var(--s2) var(--gutter) var(--s4);
+    max-height: calc(100dvh - var(--stick)); overflow-y: auto;
+    transform: translateY(-8px); opacity: 0;
+    /* Closed means gone — not just invisible. Without this the links stay
+       in the tab order and keyboard focus disappears into nothing. */
+    visibility: hidden;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms;
+  }
+  .nav[data-open="true"] {
+    transform: translateY(0); opacity: 1; visibility: visible;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s;
+  }
+  .nav a {
+    padding-block: 0.9em;
+    border-bottom: 1px solid var(--rule);
+    font-size: 1.0625rem;
+  }
+  .nav a:hover { border-bottom-color: var(--rule); }
+  .nav a[aria-current="page"] { color: var(--maroon); }
+  .nav .btn { margin-top: var(--s3); border: 1px solid var(--maroon); justify-content: center; }
+
+  /* Dim the page behind the open drawer so it reads as a layer, not a bump. */
+  .nav-scrim {
+    position: fixed; inset: var(--stick) 0 0 0; z-index: 90;
+    background: rgba(26,23,20,0.45);
+    opacity: 0; visibility: hidden;
+    transition: opacity 180ms ease, visibility 0s linear 180ms;
+  }
+  body[data-nav-open="true"] .nav-scrim { opacity: 1; visibility: visible; transition: opacity 180ms ease, visibility 0s; }
+  body[data-nav-open="true"] { overflow: hidden; }
+}
+
+/* Landscape phones: a single column pushes "Request a share" out of sight.
+   Two columns fit the whole menu without shrinking the tap targets. */
+@media (max-width: 900px) and (max-height: 480px) {
+  .nav[data-open="true"] { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--s4); align-content: start; }
+  .nav .btn { grid-column: 1 / -1; }
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero { position: relative; background: var(--ink); }
+.hero-media { position: relative; }
+.hero-media img {
+  width: 100%; height: clamp(420px, 74vh, 780px);
+  object-fit: cover; object-position: center 42%;
+}
+/* The moving version of the same photograph. It sits on top of the still and
+   fades up once it is actually playing, so a slow connection just keeps the
+   photo and nothing ever jumps. */
+.hero-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 42%;
+  opacity: 0; transition: opacity 1400ms ease;
+  pointer-events: none;
+}
+.hero-video[data-playing] { opacity: 1; }
+
+.hero-media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(16,13,11,0.88) 0%, rgba(16,13,11,0.62) 38%, rgba(16,13,11,0.22) 72%, rgba(16,13,11,0.10) 100%);
+}
+
+.hero .btn--ghost { color: var(--paper); border-color: rgba(251,248,243,0.55); }
+.hero .btn--ghost:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+
+.hero-copy {
+  position: absolute; inset: auto 0 0 0; z-index: 2;
+  padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  color: var(--paper);
+}
+.hero-copy .eyebrow { color: var(--wheat); margin-bottom: var(--s2); }
+.hero-copy h1 { color: var(--paper); max-width: 18ch; }
+.hero-copy .lede { color: rgba(251,248,243,0.9); max-width: var(--measure-sm); margin-top: var(--s3); }
+.hero-copy .btn-row { margin-top: var(--s4); }
+
+/* Landscape phones: the hero floor is taller than the screen, which pushes
+   the copy up under the sticky header. Fit it to what's actually visible. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .hero-media img { height: calc(100svh - var(--stick)); min-height: 280px; }
+  .hero-copy { padding-bottom: var(--s3); }
+  .hero-copy h1 { font-size: clamp(1.9rem, 4.6vw, 2.75rem); max-width: 24ch; }
+  .hero-copy .lede { font-size: 1rem; margin-top: var(--s2); max-width: var(--measure); }
+  .hero-copy .btn-row { margin-top: var(--s3); }
+}
+
+/* Interior page header — no photo, just type on paper. */
+.page-head { padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(2.5rem, 5vw, 4rem); }
+.page-head h1 { max-width: var(--head); }
+.page-head .lede { margin-top: var(--s3); max-width: var(--measure); }
+.page-head .btn-row { margin-top: var(--s4); }
+
+/* ==========================================================================
+   Grids
+   ========================================================================== */
+
+.grid { display: grid; gap: var(--s5); }
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--split { grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); }
+.grid--offset { grid-template-columns: 5fr 6fr; align-items: start; gap: clamp(2rem, 5vw, 5rem); }
+.grid--form   { grid-template-columns: 7fr 5fr; align-items: start; gap: clamp(2.5rem, 6vw, 6rem); }
+
+@media (max-width: 900px) {
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+  .grid--split, .grid--offset, .grid--form { grid-template-columns: 1fr; }
+  .grid--offset .media-first { order: -1; }
+}
+@media (max-width: 620px) {
+  .grid--2, .grid--3 { grid-template-columns: 1fr; }
+}
+
+figure { margin: 0; }
+figcaption { margin-top: var(--s2); font-size: var(--t-fine); color: var(--ink-mute); }
+
+.img-tall  { aspect-ratio: 4 / 5;  object-fit: cover; width: 100%; }
+.img-wide  { aspect-ratio: 3 / 2;  object-fit: cover; width: 100%; }
+.img-square{ aspect-ratio: 1 / 1;  object-fit: cover; width: 100%; }
+
+/* ==========================================================================
+   Facts strip — the four plain claims, set as a row of rules
+   ========================================================================== */
+
+.facts {
+  list-style: none; padding: 0; margin: 0;
+  counter-reset: fact;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: var(--s3);
+}
+.facts li {
+  counter-increment: fact;
+  border-top: 1px solid var(--ink);
+  padding-top: var(--s2);
+  font-size: 1rem; font-weight: 500; line-height: 1.35;
+}
+.facts li::before {
+  content: counter(fact, decimal-leading-zero);
+  display: block;
+  font-family: var(--display); font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.1em; color: var(--wheat-dk);
+  margin-bottom: 0.4em;
+}
+.section--dark .facts li::before, .section--pasture .facts li::before { color: var(--wheat); }
+@media (max-width: 760px) { .facts { grid-template-columns: repeat(2, 1fr); gap: var(--s3) var(--s2); } }
+
+/* ==========================================================================
+   Retail partners
+   ========================================================================== */
+
+.partners { list-style: none; padding: 0; margin: 0; }
+.partners li { border-top: 1px solid var(--rule); padding-block: var(--s3); }
+.partners li:last-child { border-bottom: 1px solid var(--rule); }
+.partners h3 { font-size: var(--t-sm); }
+.partners p { margin-top: 0.35em; font-size: 1rem; }
+
+/* ==========================================================================
+   Numbered steps — how an order works
+   ========================================================================== */
+
+.steps {
+  counter-reset: step;
+  border-top: 1px solid var(--rule);
+  margin-top: var(--s5);
+}
+.step {
+  counter-increment: step;
+  display: grid; grid-template-columns: 3.5rem 1fr;
+  gap: var(--s3);
+  padding-block: var(--s4);
+  border-bottom: 1px solid var(--rule);
+}
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: var(--display); font-size: 1.5rem; font-weight: 600;
+  color: var(--wheat-dk); line-height: 1.1;
+}
+.step h3 { font-size: var(--t-sm); margin-bottom: 0.35em; }
+.step p { color: var(--ink-soft); max-width: var(--measure); }
+
+.steps + .btn-row, .steps + .fine { margin-top: var(--s5); }
+
+.section--dark .steps, .section--dark .step { border-color: rgba(251,248,243,0.2); }
+.section--dark .step::before, .section--pasture .step::before { color: var(--wheat); }
+.section--dark .step p { color: rgba(251,248,243,0.78); }
+
+@media (max-width: 620px) {
+  .step { grid-template-columns: 1fr; gap: var(--s1); }
+}
+
+/* ==========================================================================
+   Slab — a block of copy under a heavy rule. Used for share sizes,
+   reasons to buy and contact routes. Named for the shape, not the content.
+   ========================================================================== */
+
+.slab {
+  border-top: 2px solid var(--ink);
+  padding-top: var(--s3);
+}
+.slab h3 { font-size: var(--t-sm); }
+.slab .slab-meta {
+  font-size: var(--t-fine); color: var(--ink-mute);
+  margin-top: var(--s1);
+}
+.slab p { margin-top: var(--s2); color: var(--ink-soft); font-size: 1rem; }
+
+/* ==========================================================================
+   Availability strip
+   ========================================================================== */
+
+.status {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  font-size: 0.875rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.status::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%;
+  background: currentColor; flex: none;
+}
+.status--open     { color: #2F6B33; }
+.status--waitlist { color: #8A5A12; }
+.status--closed   { color: var(--ink-mute); }
+.section--dark .status--open { color: #8CC48F; }
+.section--dark .status--waitlist { color: var(--wheat); }
+.section--dark .status--closed { color: rgba(251,248,243,0.6); }
+
+.availability .status + * { margin-top: 0.6rem; }
+.availability .lede { margin-top: var(--s2); max-width: var(--measure-sm); }
+.availability .fine { margin-top: var(--s3); }
+
+/* The one-line version under the home hero. Wraps on a phone. */
+.status-bar { padding-block: var(--s3); }
+.status-bar p { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s2) var(--s4); }
+
+/* ==========================================================================
+   Tables — hay inventory
+   ========================================================================== */
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: var(--s5); }
+
+table.inventory {
+  width: 100%; min-width: 560px;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+.inventory th, .inventory td {
+  text-align: left; padding: var(--s3) var(--s2);
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.inventory th {
+  font-family: var(--body); font-size: var(--t-eyebrow); font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+  border-bottom-color: var(--ink);
+  white-space: nowrap;
+}
+.inventory td:first-child { font-weight: 600; }
+.inventory tr[data-status="sold-out"] td { color: var(--ink-mute); }
+.inventory tr[data-status="sold-out"] td:first-child { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+@media (max-width: 640px) {
+  .table-scroll { overflow-x: visible; }
+  table.inventory { min-width: 0; }
+  .inventory thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .inventory tr { display: block; padding-block: var(--s3); border-bottom: 1px solid var(--rule); }
+  .inventory td { display: block; padding: 0; border: 0; }
+  .inventory td:first-child { font-size: 1.125rem; }
+  /* ink-soft, not ink-mute — otherwise every row looks as greyed-out as a
+     sold-out one and the state stops meaning anything. */
+  .inventory td + td { margin-top: 0.35rem; color: var(--ink-soft); }
+  .inventory tr[data-status="sold-out"] td + td { color: var(--ink-mute); }
+}
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+
+.faq { border-top: 1px solid var(--rule); }
+.faq details { border-bottom: 1px solid var(--rule); }
+.faq summary {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s3);
+  padding-block: var(--s3);
+  font-family: var(--display); font-size: var(--t-sm); font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer; list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; flex: none;
+  font-family: var(--body); font-weight: 400; font-size: 1.5rem;
+  line-height: 1; color: var(--maroon);
+  transition: transform 180ms ease;
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq summary:hover { color: var(--maroon); }
+.faq .answer { padding-bottom: var(--s4); max-width: var(--measure); color: var(--ink-soft); }
+.faq .answer > * + * { margin-top: 1em; }
+
+/* ==========================================================================
+   Quote
+   ========================================================================== */
+
+.quote { max-width: 30ch; }
+.quote blockquote {
+  font-family: var(--display);
+  font-size: clamp(1.375rem, 2.4vw, 2rem);
+  line-height: 1.32; font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.quote cite {
+  display: block; margin-top: var(--s3);
+  font-family: var(--body); font-style: normal;
+  font-size: var(--t-fine); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-mute);
+}
+.section--dark .quote cite, .section--pasture .quote cite { color: rgba(251,248,243,0.65); }
+
+/* Rosie's story, set as a letter. */
+.letter { max-width: var(--measure); }
+.letter p + p { margin-top: 1.2em; }
+.letter .signoff {
+  margin-top: var(--s4);
+  font-family: var(--display); font-size: 1.75rem; font-weight: 500;
+  font-style: italic; color: var(--maroon);
+}
+.letter .signoff span {
+  display: block; margin-top: 0.35em;
+  font-family: var(--body); font-style: normal; font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+}
+.letter .signoff + p { margin-top: var(--s4); }
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+.form { max-width: 640px; }
+.field + .field, .field + .fieldset, .fieldset + .field, .fieldset + .fieldset { margin-top: var(--s4); }
+
+.field label, .fieldset legend {
+  display: block;
+  font-size: 0.875rem; font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--s1);
+}
+.field .hint { font-size: var(--t-fine); color: var(--ink-mute); margin-bottom: var(--s1); }
+
+.field input, .field select, .field textarea {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--paper-3);
+  border-radius: 0;
+  padding: 0.8em 0.9em;
+  min-height: 50px;
+  font-size: 1rem;
+  transition: border-color 140ms ease;
+}
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--ink-mute); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ink); outline-offset: 1px; }
+.field textarea { min-height: 140px; resize: vertical; }
+
+/* The browser's own dropdown is rounded and grey — the only thing on the
+   site that is. Square it off and draw our own mark. */
+.field select {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%234A4038' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+
+.choices { display: grid; gap: var(--s2); }
+.choice {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  border: 1px solid var(--paper-3);
+  padding: var(--s2) var(--s3);
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.choice:hover { border-color: var(--ink-mute); }
+.choice:has(input:checked) { border-color: var(--ink); background: var(--paper-2); }
+.choice input { margin-top: 0.35em; accent-color: var(--maroon); width: 18px; height: 18px; flex: none; }
+.choice .choice-label { font-weight: 600; font-size: 1rem; }
+.choice .choice-note { font-size: var(--t-fine); color: var(--ink-mute); display: block; margin-top: 0.1em; }
+
+.fieldset { border: 0; padding: 0; margin: 0; }
+.fieldset legend { padding: 0; }
+
+.form .btn-row { margin-top: var(--s5); }
+
+.form-lead {
+  font-size: var(--t-fine); color: var(--ink-mute);
+  margin-bottom: var(--s4);
+}
+
+.form-note {
+  margin-top: var(--s4); padding-top: var(--s3);
+  border-top: 1px solid var(--rule);
+  font-size: var(--t-fine); color: var(--ink-mute);
+}
+
+.form-error {
+  margin-top: var(--s3);
+  border-left: 3px solid var(--maroon);
+  padding: var(--s2) var(--s3);
+  background: var(--paper-2);
+  font-size: 1rem;
+}
+
+.address-autocomplete { position: relative; }
+.address-suggestions {
+  position: absolute; left: 0; right: 0; top: 100%; z-index: 30;
+  margin: 0; padding: 0; list-style: none;
+  background: var(--paper); border: 1px solid var(--ink);
+  border-top: 0;
+  max-height: 280px; overflow: auto; overscroll-behavior: contain;
+}
+.address-suggestions[hidden] { display: none; }
+.address-suggestions li {
+  padding: 0.8em 0.9em; min-height: 48px;
+  border-top: 1px solid var(--paper-3);
+  font-size: 1rem; cursor: pointer; overflow-wrap: anywhere;
+}
+.address-suggestions li:first-child { border-top: 0; }
+.address-suggestions li:hover { background: var(--paper-2); }
+.address-suggestions li[aria-selected="true"] { background: var(--paper-2); box-shadow: inset 3px 0 var(--maroon); }
+.address-attribution {
+  position: absolute; right: 0.9em; top: calc(100% + 0.5em); z-index: 31;
+  font-size: 0.75rem; color: var(--ink-mute); pointer-events: none;
+}
+.address-attribution[hidden] { display: none; }
+.address-autocomplete:has(.address-suggestions:not([hidden])) .address-attribution { display: none; }
+.address-autocomplete:has(.address-suggestions:not([hidden])) .address-suggestions::after {
+  content: "Google Maps"; display: block; padding: 0.4em 0.9em;
+  border-top: 1px solid var(--paper-3);
+  font-size: 0.75rem; color: var(--ink-mute);
+}
+
+.next-steps { counter-reset: n; list-style: none; padding: 0; margin: 0; }
+.next-steps li {
+  counter-increment: n;
+  display: grid; grid-template-columns: 2.25rem 1fr;
+  gap: var(--s2);
+  padding-block: var(--s2);
+  border-bottom: 1px solid var(--rule);
+  font-size: 1rem;
+}
+.next-steps li::before {
+  content: counter(n, decimal-leading-zero);
+  font-family: var(--display); font-weight: 600; color: var(--wheat-dk);
+}
+
+.contact-big {
+  font-family: var(--display); font-size: var(--t-sm); font-weight: 600;
+  text-decoration: none; border-bottom: 1px solid var(--rule);
+  display: inline-block; padding-bottom: 0.15em; word-break: break-word;
+}
+.contact-big:hover { border-bottom-color: var(--maroon); }
+@media (max-width: 900px) { .contact-big { padding-block: 0.45em 0.3em; } }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  background: var(--ink); color: var(--paper);
+  padding-block: var(--s7) var(--s5);
+}
+.site-footer a { color: var(--paper); text-decoration: none; }
+.site-footer a:hover { color: var(--wheat); text-decoration: underline; }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--s5);
+  padding-bottom: var(--s5);
+  border-bottom: 1px solid rgba(251,248,243,0.18);
+}
+@media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .footer-grid { grid-template-columns: 1fr; gap: var(--s4); } }
+
+.footer-grid h2 {
+  font-family: var(--body); font-size: var(--t-eyebrow); font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--wheat); margin-bottom: var(--s2);
+}
+.footer-grid ul { list-style: none; padding: 0; }
+.footer-grid li + li { margin-top: 0.6em; }
+@media (max-width: 900px) {
+  .footer-grid li { min-height: 44px; display: flex; align-items: center; }
+  .footer-grid li + li { margin-top: 0; }
+}
+.footer-grid p { color: rgba(251,248,243,0.78); font-size: 1rem; }
+
+.footer-brand .brand-name { font-size: 1.5rem; color: var(--paper); }
+.footer-brand .tagline {
+  font-family: var(--display); font-style: italic;
+  font-size: 1.125rem; color: rgba(251,248,243,0.8); margin-top: var(--s1);
+}
+.footer-brand .fine { margin-top: var(--s3); }
+
+.footer-bottom {
+  display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4);
+  justify-content: space-between; align-items: center;
+  padding-top: var(--s4);
+  font-size: var(--t-fine); color: rgba(251,248,243,0.6);
+}
+.footer-bottom--bare { padding-top: 0; border: 0; }
+
+/* ==========================================================================
+   Page-load reveal — one orchestrated moment, nothing scattered.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal > * {
+    animation: rise 620ms cubic-bezier(0.22, 0.7, 0.3, 1) backwards;
+  }
+  .reveal > *:nth-child(1) { animation-delay: 60ms; }
+  .reveal > *:nth-child(2) { animation-delay: 150ms; }
+  .reveal > *:nth-child(3) { animation-delay: 240ms; }
+  .reveal > *:nth-child(4) { animation-delay: 330ms; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   Print — a printed page still has to be able to phone us.
+   ========================================================================== */
+
+@media print {
+  .site-header, .site-footer, .nav-toggle, .nav-scrim, .skip { display: none !important; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .section, .section--tight, .section--band { padding-block: 1.5rem; background: #fff !important; color: #000 !important; }
+  .section--dark *, .section--pasture * { color: #000 !important; }
+  /* Buttons are how several phone numbers are presented. Print them as text. */
+  .btn {
+    background: none !important; color: #000 !important;
+    border: 0; padding: 0; min-height: 0;
+    font-size: 11pt; text-transform: none; letter-spacing: 0;
+  }
+  .btn-row { display: block; }
+  .btn-row .btn + .btn::before { content: " · "; }
+  a[href^="tel:"]::after, a[href^="mailto:"]::after { content: " (" attr(href) ")"; font-size: 9pt; }
+  a[href^="tel:"]::after { content: ""; }
+  .faq details { display: block; }
+  .faq .answer { display: block !important; }
+  img { max-width: 40% !important; }
+}

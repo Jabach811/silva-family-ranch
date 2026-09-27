@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order request | Silva Ranch, Tracy CA</title>
+<meta name="description" content="Request a whole, half or quarter beef share from Silva Ranch in Tracy, California. No payment now — we confirm availability first, then ask for a deposit.">
+<meta name="theme-color" content="#FBF8F3">
+<link rel="canonical" href="https://www.silvafamilyranch.com/order.html">
+<link rel="icon" href="assets/img/favicon-180.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+<meta property="og:site_name" content="Silva Ranch">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.silvafamilyranch.com/order.html">
+<meta property="og:title" content="Order request | Silva Ranch, Tracy CA">
+<meta property="og:description" content="Tell us what share you're after. Nothing is owed until your beef is confirmed.">
+<meta property="og:image" content="https://www.silvafamilyranch.com/assets/img/social-card.jpg">
+<meta property="og:image:alt" content="Silva Ranch cattle grazing in tall grass at sunset">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Petrona:ital,wght@0,400..700;1,400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <img src="assets/img/logo-gear-seal-140.webp" alt="" width="46" height="37">
+      <span class="brand-text">
+        <span class="brand-name">Silva Ranch</span>
+        <span class="brand-tag">Tracy, California</span>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu"><span></span></button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="beef.html">Beef</a>
+      <a href="hay.html">Hay</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a class="btn" href="order.html">Request a share</a>
+    </nav>
+  </div>
+</header>
+<div class="nav-scrim"></div>
+
+<main id="main">
+
+  <section class="page-head">
+    <div class="wrap reveal">
+      <p class="eyebrow">Step one</p>
+      <h1 class="display-xl">Request a beef share.</h1>
+      <p class="lede">This isn't a purchase. You're telling us what you're after so we can check it against the harvest schedule. Nothing is owed until your share is confirmed and you choose to go ahead.</p>
+      <p class="fine mt-s">This request goes to Michael and Rosie Silva in Tracy, California. There's more than one Silva Ranch &mdash; if you were looking for a different one, this isn't it.</p>
+    </div>
+  </section>
+
+  <section class="section section--tint section--tight">
+    <div class="wrap">
+      <div class="availability" data-beef-status>
+        <p class="status status--waitlist">Availability</p>
+        <h2 class="display-md">Call or email for current availability</h2>
+      </div>
+      <p class="fine mt-m" data-updated></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid grid--form">
+
+        <div>
+          <form class="form" id="order-form" method="post" data-request="Beef share order request" data-page="beef" novalidate>
+
+            <p class="form-lead">Your name, email and phone are needed, along with a share size and a finish. Everything else is optional.</p>
+
+            <div class="field">
+              <label for="name">Your name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone</label>
+              <p class="hint" id="phone-hint">Rosie usually calls to sort out the details.</p>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" aria-describedby="phone-hint" required>
+            </div>
+
+            <div class="field">
+              <label for="town">Town you'd be driving from</label>
+              <input id="town" name="town" type="text" autocomplete="address-level2" data-address-autocomplete data-address-kind="town">
+            </div>
+
+            <fieldset class="fieldset">
+              <legend>What size share?</legend>
+              <div class="choices">
+                <label class="choice">
+                  <input type="radio" name="share" value="Quarter" required>
+                  <span><span class="choice-label">Quarter</span><span class="choice-note">About 100 lb &middot; about 3 cubic feet of freezer</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="share" value="Half">
+                  <span><span class="choice-label">Half</span><span class="choice-note">Our most popular order &middot; about 6 cubic feet</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="share" value="Whole">
+                  <span><span class="choice-label">Whole</span><span class="choice-note">Best value per pound &middot; about 11 cubic feet</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="share" value="Not sure yet">
+                  <span><span class="choice-label">Not sure yet</span><span class="choice-note">We'll help you work it out</span></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend>Grass or grain finished?</legend>
+              <div class="choices">
+                <label class="choice">
+                  <input type="radio" name="finish" value="Grass finished" required>
+                  <span><span class="choice-label">Grass finished</span><span class="choice-note">Leaner, stronger flavor</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="finish" value="Grain finished">
+                  <span><span class="choice-label">Grain finished</span><span class="choice-note">More fat, milder and sweeter</span></span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="finish" value="Not sure">
+                  <span><span class="choice-label">Not sure &mdash; talk me through it</span></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label for="season">Which harvest works for you?</label>
+              <select id="season" name="season">
+                <option value="Whichever is soonest">Whichever is soonest</option>
+                <option value="Spring / Summer harvest">Spring / Summer harvest</option>
+                <option value="Fall harvest">Fall harvest</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="notes">Anything else we should know?</label>
+              <p class="hint" id="notes-hint">Questions, freezer worries, a date you need it by &mdash; all useful.</p>
+              <textarea id="notes" name="notes" aria-describedby="notes-hint"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="heard">How did you hear about us?</label>
+              <input id="heard" name="heard" type="text">
+            </div>
+
+            <p class="sr-only" aria-hidden="true">
+              <label for="website">Leave this field empty</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </p>
+
+            <div class="btn-row">
+              <button class="btn" type="submit">Send order request</button>
+            </div>
+
+            <p class="form-note">We use your details to answer this request and nothing else. We don't sell or share your information.</p>
+          </form>
+
+          <div id="order-form-done" hidden>
+            <h2 class="display-md">Thanks &mdash; it's on its way.</h2>
+            <p class="lede mt-s">Rosie will get back to you with availability. If you'd rather speak to someone now, call <a href="tel:+12094002660">209-400-2660</a>.</p>
+          </div>
+        </div>
+
+        <aside class="stack">
+          <img class="img-wide"
+               src="assets/img/product-chuck-board-1280.webp"
+               srcset="assets/img/product-chuck-board-480.webp 480w,
+                       assets/img/product-chuck-board-800.webp 800w,
+                       assets/img/product-chuck-board-1280.webp 1280w"
+               sizes="(max-width: 900px) 100vw, 40vw"
+               alt="A vacuum-sealed Silva Ranch chuck roast on a branded cutting board"
+               width="1280" height="853" loading="lazy">
+          <div>
+            <div class="rule-head"><p class="eyebrow">What happens next</p></div>
+            <ol class="next-steps">
+              <li>We check your request against the harvest schedule.</li>
+              <li>If your share is available, we ask for a deposit to reserve it.</li>
+              <li>You get the harvest date and an estimated pickup window by email.</li>
+              <li>After the carcass is weighed you get your cost breakdown and cutting sheet.</li>
+              <li>You collect your beef from the butcher shop.</li>
+            </ol>
+            <p class="fine mt-m">Prefer to do this by phone or email? Call <a href="tel:+12094002660">209-400-2660</a> or write to <a href="mailto:silvaranchbeef@gmail.com">silvaranchbeef@gmail.com</a>.</p>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <p class="brand-name">Silva Ranch</p>
+        <p class="tagline">From our family ranch, to your family's table.</p>
+        <p class="fine mt-s">Michael and Rosie Silva<br>Tracy, California</p>
+      </div>
+      <div>
+        <h2>Visit</h2>
+        <ul>
+          <li><a href="beef.html">Ranch Direct Beef</a></li>
+          <li><a href="hay.html">Hay Sales</a></li>
+          <li><a href="our-story.html">Our Story</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="order.html">Order request</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Get in touch</h2>
+        <ul>
+          <li>Beef &mdash; <a href="tel:+12094002660">209-400-2660</a></li>
+          <li>Hay &mdash; <a href="tel:+12095648309">209-564-8309</a></li>
+          <li><a href="mailto:silvaranchbeef@gmail.com">silvaranchbeef@gmail.com</a></li>
+          <li><a href="https://www.instagram.com/silvaranch_beefdirect">@silvaranch_beefdirect</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span data-year>2026</span> Silva Ranch. All rights reserved.</p>
+      <p>Silva Family Ranch &middot; Beef and hay &middot; Tracy, California</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/ranch-data.js"></script>
+<script src="js/site.js"></script>
+<script src="js/address-config.js"></script>
+<script src="js/address-google.js"></script>
+<script src="js/address-autocomplete.js"></script>
+</body>
+</html>
